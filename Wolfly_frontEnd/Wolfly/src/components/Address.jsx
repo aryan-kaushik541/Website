@@ -6,6 +6,7 @@ const AddressForm = () => {
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
   const [country, setCountry] = useState("");
+  const [phone, setPhone] = useState("");
 
   // Function to fetch state & country from pincode
   const fetchLocationDetails = async (pincode) => {
@@ -30,6 +31,15 @@ const AddressForm = () => {
       <label className="block text-gray-700 font-semibold mb-2">Shipping Address:</label>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Phone Number */}
+        <input
+          type="text"
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
         {/* Street Address */}
         <input
           type="text"

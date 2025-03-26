@@ -103,9 +103,9 @@ const Header = (props) => {
                 </li>
                 }
                 <li>
-                  <NavLink to="/addtocart" className="flex  bg-dark-teal text-teal-100 justify-center px-5 py-1 text-sm rounded-md">
+                  <NavLink to="/AddToCart" className="flex  bg-dark-teal text-teal-100 justify-center px-5 py-1 text-sm rounded-md">
                       <ShoppingCartIcon/>
-                      <p className='pl-2 text-lg'>{useAppState.addCart}</p>
+                      <p className='pl-2 text-lg'>{useAppState.AddToCart}</p>
                   </NavLink>
                 </li>
               </ul>

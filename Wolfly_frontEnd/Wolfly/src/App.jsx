@@ -1,3 +1,4 @@
+
 import Header from "./components/Header";
 import About from "./components/About";
 import Home from "./components/Home";
@@ -17,6 +18,7 @@ import Checkout from "./components/Checkout";
 import Address from "./components/Address";
 
 
+
 const Appstate = createContext();
 const App = () => {
   const [data, setData] = useState([]);
@@ -31,7 +33,7 @@ const App = () => {
             <Route path="/" element={<Home/>}/>
             <Route path="/about" element={<About />} />
             <Route path="/product" element={<ProductContent />} />
-            <Route path="/addtocart" element={<AddToCart />} />
+            <Route path="/AddToCart" element={<AddToCart />} />
             <Route path="/Address" element={<Address />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
@@ -51,4 +53,4 @@ const App = () => {
 
 
 export default App
-export {Appstate}
+export {Appstate}
