@@ -1,0 +1,91 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+// import { getToken } from './LocalStorageToken'
+export const userAuthApi = createApi({
+    reducerPath:"userAuthApi",
+    baseQuery:fetchBaseQuery({baseUrl:'http://127.0.0.1:8000/'}),
+    endpoints:(builder)=>({
+        registerUser:builder.mutation({
+            query:(user)=>{
+                
+                return{
+                    url:'accounts/register/',
+                    method:'POST',
+                    body:user,
+                    headers:{
+                        'Content-type':'application/json'
+                    }
+                }
+            },
+        }),
+        loginUser:builder.mutation({
+            query:(user)=>{
+                
+                return{
+                    url:'accounts/login/',
+                    method:'POST',
+                    body:user,
+                    headers:{
+                        'Content-type':'application/json'
+                    }
+                }
+            },
+        }),
+        sendEmailPassword:builder.mutation({
+            query:(user)=>{
+                
+                return{
+                    url:'accounts/sendpasswordemail/',
+                    method:'POST',
+                    body:user,
+                    headers:{
+                        'Content-type':'application/json'
+                    }
+                }
+            },
+        }),
+        getProfileUser:builder.query({
+            query:(access_token)=>{
+                
+                return{
+                    url:'accounts/profile/',
+                    method:'GET',
+                    headers:{
+                        'Content-type':'application/json',
+                        'authorization':`Bearer ${access_token}`
+                    }
+                }
+            },
+        }),
+        changePassword:builder.mutation({
+            query:({form,access_token})=>{
+                return{
+                    url:'accounts/passwordchange/',
+                    method:'POST',
+                    body:form,
+                    headers:{
+                        'Content-type':'application/json',
+                        'authorization':`Bearer ${access_token}`
+                    }
+                }
+            },
+        }),
+        resetPassword:builder.mutation({
+            query:({form,id,token})=>{
+               return{
+                    url:`accounts/resetpassword/${id}/${token}/`,
+                    method:'POST',
+                    body:form,
+                    headers:{
+                        'Content-type':'application/json',
+                    }
+                }
+            },
+        }),
+        getProducts: builder.query({
+            query: () => "products/",
+        }),
+        
+    }),
+})
+
+export const { useRegisterUserMutation,useLoginUserMutation,useSendEmailPasswordMutation,useGetProfileUserQuery,useChangePasswordMutation,useResetPasswordMutation ,useGetProductsQuery} = userAuthApi;

@@ -1,0 +1,80 @@
+[
+    {
+        "id":1,
+        "category": "Black T-Shirt",
+        "front_imges": "../src/Images/Blue_Tshirt_Front.png",
+        "back_imges": "../src/Images/Blue_Tshirt_Back.png",
+        "title": "Blue_Tshirt_Front",
+        "decription": "Powerful laptop with a quad-core i5 processor, 8GB RAM, 256GB SSD, and a 14-inch FHD display.",
+        "actual_price": 1500,
+        "discount_price": 1000,
+        "stock": 100
+        
+
+    },
+    {
+        "id":2,
+        "category": "Mobile",
+        "front_imges": "../src/Images/Black_Tshirt_Front.png",
+        "back_imges": "../src/Images/Black_Tshirt_Back.png",
+        "title": "Black_Tshirt_Front",
+        "decription": "Feature-rich smartphone with a 6.2-inch screen, 12MP dual camera, 128GB storage, and a 4000mAh battery.",
+        "actual_price": 1400,
+        "discount_price": 1000,
+        "stock": 700
+        
+
+    },
+    {
+        "id":3,
+        "category": "Audio",
+        "front_imges":"../src/Images/Maroon_Front.png",
+        "back_imges":"../src/Images/Maroon_Back.png",
+        "title": "Maroon_Front",
+        "decription": "MZ M423SP - Sound Bar Dynamic Thunder Sound with High Bass 10 W Bluetooth Speaker. ",
+        "actual_price": 2000,
+        "discount_price": 1500,
+        "stock": 300
+       
+
+    },
+    {
+        "id":4,
+        "category": "Video",
+        "front_imges": "../src/Images/yellow_Tshirt.png",
+        "title": "yelllow_Tshirt",
+        "decription": "You can enjoy unlimited entertainment at the comfort of your home with this smart TV. ",
+        "actual_price": 2499,
+        "discount_price": 1999,
+        "stock": 200
+        
+
+    },
+    {
+        "id":5,
+        "category": "Wearables",
+        "front_imges": "../src/Images/green_Tshirt_Front.png",
+        "back_imges": "../src/Images/green_Tshirt_Back.png",
+        "title": "green_Tshirt_Front",
+        "decription": "Smartwatch with a 1.3-inch AMOLED display, water-resistant design, fitness tracking features, and a stylish silver color.",
+        "actual_price": 2999,
+        "discount_price": 999,
+        "stock": 4
+        
+
+    },
+    {
+        "id":6,
+        "category": "Audio",
+        "front_imges": "../src/Images/Black_Jacket_Front.png",
+        "back_imges": "../src/Images/Black_Jacket_Back.png",
+        "title": "Black_Jacket_Front",
+        "decription": "Featuring sophisticated Active Noise Cancellation (ANC) technology, this neckband immerses you in a personalised auditory experience.",
+        "actual_price": 2999,
+        "discount_price": 1499,
+        "stock": 200
+        
+
+    }
+    
+]
