@@ -1,11 +1,15 @@
+# backend/orders/views.py
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from orders.serializers import OrderSerializer
-from orders.models import Order
+from orders.serializers import OrderSerializer, CartItemSerializer
+from orders.models import Order, CartItem
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from products.models import Products
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import permissions
 
 class ShowOrder(APIView):
     permission_classes = [IsAuthenticated]
@@ -19,25 +23,21 @@ class ShowOrder(APIView):
                 {"error": "You do not have any orders."},
                 status=status.HTTP_404_NOT_FOUND
             )
-            
-
 
 class CreateOrder(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self,request):
-
         product_slug=request.data.get('product')
         try:
             product = Products.objects.get(slug=product_slug)
             if product.stock < 1:
                 return Response({"error": "Product is out of stock"}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Create the order
             order = Order.objects.create(
                 customer=request.user,
                 products=product,
-                final_price=product.discount_price,  # Set final price from discount price
+                final_price=product.discount_price,
             )
 
             product.stock -= 1
@@ -46,6 +46,61 @@ class CreateOrder(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Products.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class AddToCart(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        cart_items = CartItem.objects.filter(customer=request.user)
+        serializer = CartItemSerializer(cart_items, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        product_slug = request.data.get('products')
+        quantity = request.data.get('quantity', 1)
+
+        try:
+            product = get_object_or_404(Products, slug=product_slug)
+            if product.stock < quantity:
+                return Response({"error": "Not enough stock available"}, status=status.HTTP_400_BAD_REQUEST)
+
+            CartItem, created = CartItem.objects.get_or_create(
+                customer=request.user,
+                product=product,
+                defaults={"quantity": quantity}
+            )
+
+            if not created:
+                CartItem.quantity += quantity
+                CartItem.save()
+
+            serializer = CartItemSerializer(CartItem)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def patch(self, request, pk):
+        try:
+            cart_item = CartItem.objects.get(pk=pk, customer=request.user)
+            quantity = request.data.get('quantity')
+            if quantity is not None:
+                cart_item.quantity = quantity
+                cart_item.save()
+                serializer = CartItemSerializer(cart_item)
+                return Response(serializer.data)
+            else:
+                return Response({"error": "Quantity is required"}, status=status.HTTP_400_BAD_REQUEST)
+        except CartItem.DoesNotExist:
+            return Response({"error": "Cart item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk):
+        try:
+            CartItem = CartItem.objects.get(pk=pk, customer=request.user)
+            CartItem.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CartItem.DoesNotExist:
+            return Response({"error": "Cart item not found"}, status=status.HTTP_404_NOT_FOUND)
+
