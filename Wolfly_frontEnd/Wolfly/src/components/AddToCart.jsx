@@ -15,7 +15,7 @@ const AddToCart = () => {
 
     useEffect(() => {
         if (access_token) {
-            const storedCart = JSON.parse(localStorage.getItem('products')) || [];
+            const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
             setCartItems(storedCart);
         } else {
             navigate("/login");
@@ -46,14 +46,14 @@ const AddToCart = () => {
             .filter(Boolean);
 
         setCartItems(updatedCart);
-        localStorage.setItem('products', JSON.stringify(updatedCart));
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
         useAppState.setAddCart(updatedCart.length);
     };
 
     const handleRemoveItem = (itemId) => {
         const updatedCart = cartItems.filter((item) => item.id !== itemId);
         setCartItems(updatedCart);
-        localStorage.setItem('products', JSON.stringify(updatedCart));
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
         useAppState.setAddCart(updatedCart.length);
     };
 

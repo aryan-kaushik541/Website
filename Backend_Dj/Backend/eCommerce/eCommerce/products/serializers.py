@@ -13,15 +13,26 @@ class CategorySerializer(serializers.ModelSerializer):
         exclude = ['id','created_at','updated_at']
 
 class ProductSerializer(serializers.ModelSerializer):
+    brand = serializers.PrimaryKeyRelatedField(queryset=BrandName.objects.all())  # Allows passing brand ID
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())  # Allows passing category ID
+    brand_detail = BrandNameSerializer(source="brand", read_only=True)  # Read-only brand details
+    category_detail = CategorySerializer(source="category", read_only=True)  # Read-only category details
+
     class Meta:
         model = Products
-        exclude = ['id', 'created_at', 'updated_at', 'slug']  # Remove slug to generate dynamically
+        fields = [
+            "id", "title", "decription", "actual_price", "discount_price", 
+            "stock", "front_imges", "back_imges", "slug", "brand", "category", 
+            "brand_detail", "category_detail"
+        ]
+        read_only_fields = ["slug"]  # Slug should be auto-generated
 
     def create(self, validated_data):
-        validated_data['slug'] = get_slug()  # Generate slug when creating product
-        return super().create(validated_data)
+        """Custom create method to handle slug generation"""
+        product = Products.objects.create(**validated_data)
+        return product
 
     def update(self, instance, validated_data):
-        if 'title' in validated_data:
-            validated_data['slug'] = get_slug()  # Regenerate slug if title changes
+        """Update method to prevent slug modification"""
+        validated_data.pop("slug", None)  # Prevent slug updates
         return super().update(instance, validated_data)
