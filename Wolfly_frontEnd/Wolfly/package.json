@@ -20,6 +20,7 @@
     "firebase": "^11.4.0",
     "framer-motion": "^12.4.10",
     "git": "^0.1.5",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.477.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

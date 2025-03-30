@@ -32,40 +32,38 @@ const Login = () => {
     const dispatch = useDispatch()
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
         if (form.email && form.password) {
             if (!/\S+\.\S+/.test(form.email)) {
                 setMsg({ status: true, severity: 'warning', msg: 'Email is invalid' })
-            }
-            else if (form.password.length < 8) {
+            } else if (form.password.length < 8) {
                 setMsg({ status: true, severity: 'warning', msg: 'Password must be 8 character' })
-            }
-            else {
-                const response = await loginUser(form)
-                console.log(response)
-                if(response.error){
-                    const error_msg=response.error.data.errors.non_field_errors[0]
-                    setMsg({ status: true, severity: 'error', msg: error_msg })
+            } else {
+                const response = await loginUser(form);
+                console.log(response);
+                if (response.error) {
+                    const error_msg = response.error.data.errors.non_field_errors[0];
+                    setMsg({ status: true, severity: 'error', msg: error_msg });
+                } else {
+                    const success_msg = response.data.msg;
+                    setMsg({ status: true, severity: 'success', msg: success_msg });
+                    console.log("success");
+                    setTimeout(() => {
+                        storeToken(response.data.token);
+                        const { access_token } = getToken();
+                        dispatch(setUserToken({ access_token: access_token }));
+    
+                        // ✅ Redirect based on user type
+                        const isAdmin = response.data.is_admin;  
+                        navigate(isAdmin ? '/admin-dashboard' : '/');
+                    }, 2000);
                 }
-                else{
-                    const success_msg=response.data.msg;
-                    setMsg({ status: true, severity: 'success', msg: success_msg})
-                    console.log("success")
-                    setTimeout(()=>{
-                        // store token in local browser
-                        storeToken(response.data.token)
-                        const {access_token}=getToken()
-                        dispatch(setUserToken({access_token:access_token}))
-                        navigate('/')
-                    },2000)
-                    
-                }
             }
+        } else {
+            setMsg({ status: true, severity: 'warning', msg: 'All Fields Required' });
         }
-        else {
-            setMsg({ status: true, severity: 'warning', msg: 'All Field Required' })
-        }
-    }
+    };
+    
     const {access_token}=getToken()
     useEffect(()=>{
         dispatch(setUserToken({access_token:access_token}))

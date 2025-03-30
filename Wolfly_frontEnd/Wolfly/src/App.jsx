@@ -9,6 +9,7 @@ import PageNotFound from "./PageNotFound";
 import { createContext,useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
+import AdminDashboard from './components/AdminDashboard';
 import SignUp from "./components/SignUpForm";
 import Forgetpassword from "./components/Forgetpassword";
 import ResetPassword from "./components/ResetPassword";
@@ -27,13 +28,14 @@ const App = () => {
  
   return (
     <>
-      <Appstate.Provider value={{data,setData,addCart,setAddCart}}>
+      <Appstate.Provider value={{data,setData,AddToCart,setAddCart}}>
         <Header auth={auth_token} />
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/about" element={<About />} />
             <Route path="/product" element={<ProductContent />} />
             <Route path="/AddToCart" element={<AddToCart />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/Address" element={<Address />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />

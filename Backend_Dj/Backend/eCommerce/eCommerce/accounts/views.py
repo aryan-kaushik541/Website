@@ -56,24 +56,36 @@ class ActivateAccountView(APIView):
             return Response({'error': 'Activation failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginView(APIView):
-    # renderer_classes = [UserRenderer]
-    def post(self,request):
-        serializer=UserLoginSerializers(data=request.data)
+    def post(self, request):
+        serializer = UserLoginSerializers(data=request.data)
         if serializer.is_valid():
-            email=serializer.data.get('email')
-            password=serializer.data.get('password')
-    
-            # authenticate
-            user=authenticate(email=email,password=password)
+            email = serializer.data.get('email')
+            password = serializer.data.get('password')
+            
+            # Authenticate user
+            user = authenticate(email=email, password=password)
 
             if user is not None:
-                token=get_tokens_for_user(user)
-                return Response({'token':token,'msg':'LoginSuccessFull'},status=status.HTTP_200_OK)
-            
-            return Response({'errors':{'non_field_errors':['Email or Password is not valid']}},status=status.HTTP_404_NOT_FOUND)
-        # print(serializer.errors)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-        
+                token = get_tokens_for_user(user)
+
+                if user.is_staff:  # ✅ If user is admin, send additional flag
+                    return Response({'token': token, 'msg': 'Admin Login Successful', 'is_admin': True}, status=status.HTTP_200_OK)
+
+                return Response({'token': token, 'msg': 'User Login Successful', 'is_admin': False}, status=status.HTTP_200_OK)
+
+            return Response({'errors': {'non_field_errors': ['Invalid email or password']}}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if not request.user.is_staff:
+            return Response({'error': 'Unauthorized access'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'msg': 'Welcome to the Admin Dashboard', 'admin_name': request.user.get_full_name()}, status=status.HTTP_200_OK)
+
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request,format=None):
