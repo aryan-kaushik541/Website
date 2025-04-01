@@ -22,7 +22,7 @@ class ProductMinimalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Products
-        fields = ['brand', 'category']
+        fields = ['brand', 'category','front_imges','title','discount_price']
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -36,12 +36,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    product_title = serializers.CharField(source="product.title", read_only=True)
-    product_price = serializers.FloatField(source="product.discount_price", read_only=True)
-    product_image = serializers.ImageField(source="product.image", read_only=True)
-    product = serializers.PrimaryKeyRelatedField(queryset=Products.objects.all()) # Change
+    # product_title = serializers.CharField(source="product.title", read_only=True)
+    # product_price = serializers.FloatField(source="product.discount_price", read_only=True)
+    # product_image = serializers.ImageField(source="product.image", read_only=True)
+    product = ProductMinimalSerializer() # Change
 
     class Meta:
         model = CartItem
-        fields = ["id", "customer", "product", "quantity", "product_title", "product_price", "product_image"]
+        fields = ["id", "customer", "product", "quantity"]
 

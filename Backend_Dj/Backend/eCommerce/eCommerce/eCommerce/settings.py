@@ -173,7 +173,7 @@ REST_FRAMEWORK = {
 
 # JWT’s behavior
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=140),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -219,7 +219,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Django includes functionality to expire the token in less than 1 day in Django 3.1 or newer. Use the setting PASSWORD_RESET_TIMEOUT which takes number of seconds after which token will expire.
-PASSWORD_RESET_TIMEOUT = 900 # 300 sec == 15 min 
+PASSWORD_RESET_TIMEOUT = 55900 # 300 sec == 15 min 
 
 SITE_DOMAIN = 'http://localhost:8000'
 SITE_NAME = 'Local Host'

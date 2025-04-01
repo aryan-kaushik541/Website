@@ -84,8 +84,34 @@ export const userAuthApi = createApi({
         getProducts: builder.query({
             query: () => "products/",
         }),
+        getCartItem: builder.query({
+            query:(access_token)=>{
+            
+                return{
+                    url:'orders/cart/',
+                    method:'GET',
+                    headers:{
+                        'Content-type':'application/json',
+                        'authorization':`Bearer ${access_token}`
+                    }
+                }
+            },
+        }),
+        deleteCartItem: builder.mutation({
+            query: ( {itemId, access_token }) => {
+           
+                return {
+                url: `orders/cart/${itemId}/`,
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json',
+                    'authorization': `Bearer ${access_token}`
+                }
+            }
+            },
+        }),
         
     }),
 })
 
-export const { useRegisterUserMutation,useLoginUserMutation,useSendEmailPasswordMutation,useGetProfileUserQuery,useChangePasswordMutation,useResetPasswordMutation ,useGetProductsQuery} = userAuthApi;
+export const { useRegisterUserMutation,useLoginUserMutation,useSendEmailPasswordMutation,useGetProfileUserQuery,useChangePasswordMutation,useResetPasswordMutation ,useGetProductsQuery,useGetCartItemQuery,useDeleteCartItemMutation} = userAuthApi;

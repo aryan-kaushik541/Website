@@ -54,6 +54,7 @@ class AddToCart(APIView):
 
     def get(self, request):
         cart_items = CartItem.objects.filter(customer=request.user)
+        print(cart_items)
         serializer = CartItemSerializer(cart_items, many=True)
         return Response(serializer.data)
 
@@ -98,8 +99,8 @@ class AddToCart(APIView):
 
     def delete(self, request, pk):
         try:
-            CartItem = CartItem.objects.get(pk=pk, customer=request.user)
-            CartItem.delete()
+            item = CartItem.objects.get(pk=pk, customer=request.user)
+            item.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except CartItem.DoesNotExist:
             return Response({"error": "Cart item not found"}, status=status.HTTP_404_NOT_FOUND)

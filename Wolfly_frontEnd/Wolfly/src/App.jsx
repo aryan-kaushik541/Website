@@ -28,7 +28,7 @@ const App = () => {
  
   return (
     <>
-      <Appstate.Provider value={{data,setData,AddToCart,setAddCart}}>
+      <Appstate.Provider value={{data,setData,AddToCart,addCart,setAddCart}}>
         <Header auth={auth_token} />
           <Routes>
             <Route path="/" element={<Home/>}/>

@@ -17,10 +17,13 @@ const Header = (props) => {
     const f1 = ()=>{
       // get number of item in cart
       const numberCartItem=JSON.parse(localStorage.getItem('products'))
+    
       if (numberCartItem){
         useAppState.setAddCart(numberCartItem.length)
 
       }
+  
+      
     }
     f1();
     
@@ -103,9 +106,9 @@ const Header = (props) => {
                 </li>
                 }
                 <li>
-                  <NavLink to="/AddToCart" className="flex  bg-dark-teal text-teal-100 justify-center px-5 py-1 text-sm rounded-md">
+                  <NavLink to={access_token?`/Checkout`:`/login`} className="flex  bg-dark-teal text-teal-100 justify-center px-5 py-1 text-sm rounded-md">
                       <ShoppingCartIcon/>
-                      <p className='pl-2 text-lg'>{useAppState.AddToCart}</p>
+                      <p className='pl-2 text-lg'>{useAppState.addCart}</p>
                   </NavLink>
                 </li>
               </ul>
