@@ -1,18 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-
-
+from django.core.validators import RegexValidator
+from django.conf import settings
 
 
 
 class user_address(models.Model):
-    village_or_town=models.TextField()
-    city=models.CharField(max_length=200)
-    state=models.CharField(max_length=200)
-    pincode=models.CharField(max_length=7)
-    phone=models.CharField(max_length=12)
-    
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="addresses", null=True, blank=True)
+    village_or_town = models.TextField()
+    city = models.CharField(max_length=200)
+    state = models.CharField(max_length=200)
+    pincode = models.CharField(max_length=7)
+    phone = models.CharField(
+        max_length=12,
+        validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$')]
+    )
+    def __str__(self):
+        return f"{self.user.email if self.user else 'No User'} - {self.village_or_town}, {self.city}, {self.state}, {self.pincode}"
 
 # Custom User Model
 class UserManager(BaseUserManager):

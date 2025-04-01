@@ -37,35 +37,55 @@ const ProductDetails = () => {
     navigate("/Checkout");
   };
 
-  const handleAddToCart = () => {
-    
-    // if (!product) return; // Prevent adding if product is not loaded
+  const handleAddToCart = (product) => {
+    if (!product) return; // Prevent adding if product is not loaded
 
-    // let cart = JSON.parse(localStorage.getItem("products")) || [];
+    try {
+        // Get existing cart from local storage or initialize an empty array
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // const existingProduct = cart.find((item) => item.id === product.id);
+        // Check if product already exists in the cart
+        const existingProduct = cart.find((item) => item.id === product.id);
 
-    // if (existingProduct) {
-    //   existingProduct.quantity += 1;
-    //   existingProduct.price = product.discount_price * existingProduct.quantity; //update price with new quantity
-    // } else {
-    //   cart.push({
-    //     id: product.id,
-    //     title: product.title,
-    //     price: product.discount_price,
-    //     quantity: 1,
-    //     stock: product.stock,
-    //     front_imges: product.front_imges,
-    //     back_imges: product.back_imges,
-    //     category: product.category,
-    //   });
-    // }
+        if (existingProduct) {
+            // Check stock before updating quantity
+            if (existingProduct.quantity < product.stock) {
+                // Update quantity and price
+                existingProduct.quantity += 1;
+                existingProduct.price = product.discount_price * existingProduct.quantity;
+            } else {
+                toast.error("Stock limit reached", { position: "top-right", autoClose: 1000, theme: "colored" });
+                return;
+            }
+        } else {
+            // Add new product to the cart
+            cart.push({
+                id: product.id,
+                title: product.title,
+                price: product.discount_price,
+                quantity: 1,
+                stock: product.stock,
+                front_imges: product.front_imges,
+                back_imges: product.back_imges,
+                category: product.category,
+            });
+        }
 
-    // localStorage.setItem("products", JSON.stringify(cart));
-    
-    // useAppState.setAddCart(cart.length); // Update cart count in Appstate
-    toast.success("Product added to cart!", { position: "top-right", autoClose: 1000, theme: "colored" });
-  };
+        // Update local storage
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Update cart count in global state (Appstate)
+        useAppState.setAddCart(cart.length);
+
+        // Show success message
+        toast.success("Product added to cart!", { position: "top-right", autoClose: 1000, theme: "colored" });
+    } catch (error) {
+        console.error("Error handling the cart:", error);
+        toast.error("Something went wrong. Please try again.", { position: "top-right", autoClose: 1000, theme: "colored" });
+    }
+};
+
+
 
   if (loading) {
     return (

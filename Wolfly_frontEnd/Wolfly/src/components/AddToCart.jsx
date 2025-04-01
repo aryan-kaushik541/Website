@@ -38,6 +38,10 @@ const AddToCart = () => {
                     if (newQuantity <= 0) {
                         return null;
                     }
+                    if (newQuantity > item.stock) {
+                        toast.error("Cannot exceed available stock", { position: "top-right", autoClose: 1000, theme: "colored" });
+                        return item; // Don't change quantity if exceeding stock
+                    }
                     const updatedItem = { ...item, quantity: newQuantity, price: (item.discount_price || 0) * newQuantity }; // Handle undefined discount_price
                     return updatedItem;
                 }
@@ -79,7 +83,7 @@ const AddToCart = () => {
                                 <div className="flex-grow">
                                     <h2 className="text-lg font-semibold">{item.title}</h2>
                                     <p className="text-gray-600">
-                                        Price: ₹{item.price !== undefined && item.price !== null ? item.price.toLocaleString('en-IN') : '0.00'}
+                                        Price: ₹{(item.price || 0).toLocaleString('en-IN')}
                                     </p>
                                     <div className="flex items-center mt-2">
                                         <button

@@ -17,7 +17,8 @@ class Order(models.Model):
     final_price=models.FloatField()
 
     def __str__(self):
-        return str(self.order_id)
+        # Show order_id and the customer's name (if available)
+        return f"Order ID: {self.order_id}, Name: {self.customer.name if self.customer else 'Unknown'}"
     
     def save(self, *args, **kwargs):
         if not self.pk:
