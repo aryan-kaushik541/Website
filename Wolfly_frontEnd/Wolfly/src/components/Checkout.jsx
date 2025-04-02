@@ -3,10 +3,10 @@ import Address from "./Address";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import emptyCart from '../Images/cart.png';
 
-import { useGetCartItemQuery, useDeleteCartItemMutation } from "../services/userAuthApi";
+import { useGetCartItemQuery, useDeleteCartItemMutation, useUpdateCartItemQuantityMutation } from "../services/userAuthApi";
 import { Appstate } from "../App";
 import { getToken } from "../services/LocalStorageToken";
-
+import { ToastContainer, toast } from "react-toastify";
 const Checkout = () => {
     const useAppState = useContext(Appstate);
     const { slug } = useParams();
@@ -27,15 +27,20 @@ const Checkout = () => {
     const { access_token } = getToken();
     const { data: cartData, error } = useGetCartItemQuery(access_token);
     const [deleteCartItem] = useDeleteCartItemMutation(access_token);
+    const [updatetoquantity] = useUpdateCartItemQuantityMutation(access_token)
+    const [quantity, setQuantity] = useState(0)
+    
 
+  
+    
     useEffect(() => {
+        
         if (cartData) {
             setCartItems(cartData);
             const totalPrice = cartData.reduce((acc, item) => acc + (item.product.discount_price * item.quantity), 0);
             setTotalProductPrice(totalPrice);
-            useAppState.setAddCart(cartData.length)
+            useAppState.setAddCartLength(cartData.length)
         }
-     
     }, [cartData]);
 
     const getTotalPrice = () => {
@@ -43,16 +48,16 @@ const Checkout = () => {
     };
 
     const handleRemoveItem = async (itemId) => {
-        console.log(itemId)
+
         try {
             await deleteCartItem({ itemId, access_token });
             // After successful deletion, update the cart state
             const updatedCart = cartItems.filter(item => item.id !== itemId);
             setCartItems(updatedCart);
-        
+
             // Update total price after state update
             setTotalProductPrice(updatedCart.reduce((acc, item) => acc + (item.product.discount_price * item.quantity), 0));
-
+            useAppState.setAddCartLength(updatedCart.length)
         } catch (error) {
             console.error("Error deleting item:", error);
         }
@@ -174,11 +179,59 @@ const Checkout = () => {
         setPaymentMethod(event.target.value);
     };
 
+    // product increment
+    const increment = async (currElement) => {
+
+        const itemId = currElement.id;
+        const quantity = currElement.quantity + 1;
+        await updatetoquantity({ itemId, quantity, access_token });
+
+        // After successful update, refetch cart items to reflect changes
+        const updatedCart = cartData.map(item => item.id === itemId ? { ...item, quantity } : item);
+        setCartItems(updatedCart);
+        
+
+        let total =0
+        updatedCart.map((item)=>{
+            total+=(item.product.discount_price*item.quantity)
+            
+        })
+        setTotalProductPrice(total)
+    
+        
+
+    }
+    // product increment
+    const decrement = async (currElement) => {
+        
+         
+        const itemId = currElement.id;
+
+        const quantity = currElement.quantity - 1;
+     
+        if (!quantity==0){
+            await updatetoquantity({ itemId, quantity, access_token });
+
+            // After successful update, refetch cart items to reflect changes
+            const updatedCart = cartData.map(item => item.id === itemId ? { ...item, quantity } : item);
+            setCartItems(updatedCart);
+            let total =0
+            updatedCart.map((item)=>{
+                total+=(item.product.discount_price*item.quantity)
+                
+            })
+            setTotalProductPrice(total)
+        }
+
+        
+           
+       
+    }
     return (
 
         <div className="min-h-screen bg-white p-6 flex justify-center items-center">
             {
-                cartItems.length !== 0?
+                cartItems.length !== 0 ?
                     <div className="max-w-4xl w-full bg-white shadow-xl rounded-lg p-8 border border-gray-200">
 
                         <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">🛒 Checkout</h2>
@@ -188,6 +241,7 @@ const Checkout = () => {
                                 <p className="text-red-600 text-center text-lg">Your cart is empty!</p>
                             ) : (
                                 cartItems.map((item) => (
+
                                     <div key={item.id} className="flex flex-col border-b py-3">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-4">
@@ -202,26 +256,16 @@ const Checkout = () => {
                                                         ₹{item.product.discount_price} x {item.quantity}
                                                     </p>
                                                 </div>
-                                                <div className="flex items-center mt-2">
-                                                    <button
-                                                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                                                        className="px-2 py-1 bg-gray-200 rounded-l-md"
-                                                    >
-                                                        -
-                                                    </button>
-                                                    <input
-                                                        type="number"
-                                                        value={item.quantity}
-                                                        onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                                                        className="w-16 text-center border p-1"
-                                                    />
-                                                    <button
-                                                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                                                        className="px-2 py-1 bg-gray-200 rounded-r-md"
-                                                    >
-                                                        +
-                                                    </button>
+                                                <div className='grid items-center grid-cols-3 my-3 mx-0 border-2 border-gray-500 rounded-lg'>
+
+                                                    <button className='py-1 px-4 font-bold border-r-2 border-gray-500  text-lg' onClick={() => decrement(item)} >-</button>
+
+                                                    <p className='py-1 px-4 text-center text-lg'>{item.quantity}</p>
+
+                                                    <button className='py-1 px-4 font-bold border-l-2 border-gray-500 text-lg' onClick={() => increment(item)} >+</button>
+
                                                 </div>
+
 
                                             </div>
                                             <p className="font-bold text-lg text-green-600">
@@ -237,6 +281,7 @@ const Checkout = () => {
                                         <div className="mt-2">
                                             <p className="text-sm text-gray-700">Brand Name: {item.product.brand.name}</p>
                                         </div>
+
                                     </div>
                                 ))
                             )}

@@ -6,33 +6,28 @@ import {Appstate} from '../App'
 import { getToken,deleteToken } from '../services/LocalStorageToken';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGetCartItemQuery } from "../services/userAuthApi";
+
 
 const Header = (props) => {
   const useAppState = useContext(Appstate);
   const [storeToken,setToken]=useState('')
   const { access_token } = getToken();
   const navigate = useNavigate();
-  
-  useEffect(() =>{
-    const f1 = ()=>{
-      // get number of item in cart
-      const numberCartItem=JSON.parse(localStorage.getItem('products'))
-    
-      if (numberCartItem){
-        useAppState.setAddCart(numberCartItem.length)
 
-      }
-  
-      
-    }
-    f1();
-    
-
-  },[])
+  const { data: cartData, error } = useGetCartItemQuery(access_token);
  
   useEffect(()=>{
+    if(cartData){
+      useAppState.setAddCartLength(cartData.length);
+    }
+
     setToken(access_token);
-  },[props.auth])
+    
+  },[props.auth,cartData])
+
+
+ 
   
   const handleLogout = () => {
     deleteToken();
@@ -108,7 +103,7 @@ const Header = (props) => {
                 <li>
                   <NavLink to={access_token?`/Checkout`:`/login`} className="flex  bg-dark-teal text-teal-100 justify-center px-5 py-1 text-sm rounded-md">
                       <ShoppingCartIcon/>
-                      <p className='pl-2 text-lg'>{useAppState.addCart}</p>
+                      <p className='pl-2 text-lg'>{access_token?useAppState.addCartLength:''}</p>
                   </NavLink>
                 </li>
               </ul>

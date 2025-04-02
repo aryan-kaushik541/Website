@@ -4,6 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Appstate } from "../App"; // Assuming you have an Appstate context
+import { useAddToCartMutation } from '../services/userAuthApi'
+import { getToken } from "../services/LocalStorageToken";
+
 
 const ProductDetails = () => {
   const { slug } = useParams();
@@ -12,7 +15,12 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { access_token } = getToken();
   const useAppState = useContext(Appstate); // Access Appstate context
+  const [addtocart, { isLoading }] = useAddToCartMutation(access_token)
+  
+
+
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -37,34 +45,20 @@ const ProductDetails = () => {
     navigate("/Checkout");
   };
 
-  const handleAddToCart = () => {
-    
-    // if (!product) return; // Prevent adding if product is not loaded
+  const [productInfo, setProductInfo] = useState({
+    'product': slug,
+    'quantity': 1
+  })
 
-    // let cart = JSON.parse(localStorage.getItem("products")) || [];
+  const handleAddToCart = async () => {
+    const response = await addtocart({ productInfo, access_token })
+    console.log(response)
+    if (response.error) {
+      toast.error(response.error.data.error, { position: "top-right", autoClose: 1000, theme: "colored" });
+    } else {
 
-    // const existingProduct = cart.find((item) => item.id === product.id);
-
-    // if (existingProduct) {
-    //   existingProduct.quantity += 1;
-    //   existingProduct.price = product.discount_price * existingProduct.quantity; //update price with new quantity
-    // } else {
-    //   cart.push({
-    //     id: product.id,
-    //     title: product.title,
-    //     price: product.discount_price,
-    //     quantity: 1,
-    //     stock: product.stock,
-    //     front_imges: product.front_imges,
-    //     back_imges: product.back_imges,
-    //     category: product.category,
-    //   });
-    // }
-
-    // localStorage.setItem("products", JSON.stringify(cart));
-    
-    // useAppState.setAddCart(cart.length); // Update cart count in Appstate
-    toast.success("Product added to cart!", { position: "top-right", autoClose: 1000, theme: "colored" });
+      toast.success("Product added to cart!", { position: "top-right", autoClose: 1000, theme: "colored" });
+    }
   };
 
   if (loading) {
@@ -80,6 +74,26 @@ const ProductDetails = () => {
     return <div className="text-center text-red-500 mt-10">{error}</div>;
   }
 
+  // product increment
+  const increment = () =>{
+    if(productInfo.quantity>product.stock){
+     
+      toast.error(`only ${product.stock} products are avilable`, { position: "top-right", autoClose: 1000, theme: "colored" });
+    }else{
+
+      setProductInfo({...productInfo,"quantity":productInfo.quantity+=1})
+    }
+  }
+  // product increment
+  const decrement = () =>{
+    if(productInfo.quantity<2){
+      toast.error(`You can't add 0 product`, { position: "top-right", autoClose: 1000, theme: "colored" });
+    }else{
+
+      setProductInfo({...productInfo,"quantity":productInfo.quantity-=1})
+    }
+  }
+  
   return (
     <>
       <ToastContainer position="top-right" autoClose={1000} hideProgressBar theme="dark" />
@@ -123,20 +137,60 @@ const ProductDetails = () => {
           <div className="border p-5 rounded-lg shadow-md bg-gray-50">
             <p className="text-xl font-semibold text-gray-800">Order Now</p>
             <p className="text-green-600 mt-1">✅ Eligible for free shipping</p>
-            <div className="flex flex-col gap-3 mt-5">
-              <button
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black py-3 px-4 rounded-lg font-semibold text-lg"
-                onClick={handleAddToCart}
-              >
-                🛒 Add to Cart
-              </button>
-              <button
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-lg font-semibold text-lg"
-                onClick={handleBuyNow}
-              >
-                ⚡ Buy Now
-              </button>
-            </div>
+            {
+              product.stock ?
+                <>
+                  <div className="flex flex-col gap-3 mt-5">
+
+                    <button
+                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-black py-3 px-4 rounded-lg font-semibold text-lg"
+                      onClick={handleAddToCart}
+                    >
+                      🛒 Add to Cart
+                    </button>
+                    <button
+                      className="w-full bg-orange-600 hover:bg-orange-600 text-white py-3 px-4 rounded-lg font-semibold text-lg"
+                      onClick={handleBuyNow}
+                    >
+                      ⚡ Buy Now
+                    </button>
+
+
+                  </div>
+
+
+                    <div className='grid items-center grid-cols-3 my-3 mx-0 border-2 border-gray-500 rounded-lg'>
+
+                        <button className='py-1 px-4 font-bold border-r-2 border-gray-500  text-lg' onClick={decrement} >-</button>
+
+                        <p className='py-1 px-4 text-center text-lg'>{productInfo.quantity}</p>
+
+                        <button className='py-1 px-4 font-bold border-l-2 border-gray-500 text-lg' onClick={increment}>+</button>
+
+                      </div>
+
+                 
+          
+                </>
+                :
+                <div className="flex flex-col gap-3 mt-5">
+
+                  <button
+                    className="w-full bg-yellow-300  text-white py-3 px-4 rounded-lg font-semibold text-lg"
+                    disabled
+                  >
+                    🛒 Add to Cart
+                  </button>
+                  <button
+                    className="w-full bg-orange-400 text-white py-3 px-4 rounded-lg font-semibold text-lg"
+                    disabled
+                  >
+                    ⚡ Buy Nowzzz
+                  </button>
+
+
+                </div>
+            }
           </div>
         </div>
       </div>

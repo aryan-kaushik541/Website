@@ -47,7 +47,7 @@ const Login = () => {
                 } else {
                     const success_msg = response.data.msg;
                     setMsg({ status: true, severity: 'success', msg: success_msg });
-                    console.log("success");
+                    
                     setTimeout(() => {
                         storeToken(response.data.token);
                         const { access_token } = getToken();

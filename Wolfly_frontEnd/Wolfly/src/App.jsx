@@ -23,12 +23,13 @@ import Address from "./components/Address";
 const Appstate = createContext();
 const App = () => {
   const [data, setData] = useState([]);
-  const [addCart,setAddCart] = useState(0);
+  const [addCart,setAddCart] = useState({});
+  const [addCartLength,setAddCartLength] = useState(0);
   const auth_token= useSelector((state) => state.auth.access_token)
  
   return (
     <>
-      <Appstate.Provider value={{data,setData,AddToCart,addCart,setAddCart}}>
+      <Appstate.Provider value={{data,setData,AddToCart,addCart,setAddCart,addCartLength,setAddCartLength}}>
         <Header auth={auth_token} />
           <Routes>
             <Route path="/" element={<Home/>}/>
