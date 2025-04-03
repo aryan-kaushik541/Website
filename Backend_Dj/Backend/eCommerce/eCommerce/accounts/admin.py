@@ -3,6 +3,8 @@ from accounts.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from accounts.models import user_address
 
+class user_addressAdmin(admin.ModelAdmin):
+    list_display = ['email', 'village_or_town', 'city', 'state', 'pincode', 'phone']
 
 class UserModelAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
