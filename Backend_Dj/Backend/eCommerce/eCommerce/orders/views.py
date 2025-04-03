@@ -59,26 +59,27 @@ class AddToCart(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        product_slug = request.data.get('products')
+        product_slug = request.data.get('product')
         quantity = request.data.get('quantity', 1)
-
+      
         try:
             product = get_object_or_404(Products, slug=product_slug)
             if product.stock < quantity:
                 return Response({"error": "Not enough stock available"}, status=status.HTTP_400_BAD_REQUEST)
 
-            CartItem, created = CartItem.objects.get_or_create(
+            cart_item, created = CartItem.objects.get_or_create(
                 customer=request.user,
                 product=product,
-                defaults={"quantity": quantity}
+    
             )
+          
+            cart_item.quantity = quantity
+           
+            
+            cart_item.save()
 
-            if not created:
-                CartItem.quantity += quantity
-                CartItem.save()
-
-            serializer = CartItemSerializer(CartItem)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+            return Response({'msg':'product added'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -87,15 +88,19 @@ class AddToCart(APIView):
         try:
             cart_item = CartItem.objects.get(pk=pk, customer=request.user)
             quantity = request.data.get('quantity')
-            if quantity is not None:
+            print(quantity)
+            if quantity is not None and quantity!=0:
                 cart_item.quantity = quantity
                 cart_item.save()
                 serializer = CartItemSerializer(cart_item)
                 return Response(serializer.data)
             else:
+               
                 return Response({"error": "Quantity is required"}, status=status.HTTP_400_BAD_REQUEST)
         except CartItem.DoesNotExist:
             return Response({"error": "Cart item not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(e)
 
     def delete(self, request, pk):
         try:

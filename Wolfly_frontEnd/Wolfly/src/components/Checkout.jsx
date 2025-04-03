@@ -28,7 +28,7 @@ const Checkout = () => {
     const { data: cartData, error } = useGetCartItemQuery(access_token);
     const [deleteCartItem] = useDeleteCartItemMutation(access_token);
     const [updatetoquantity] = useUpdateCartItemQuantityMutation(access_token)
-    const [quantity, setQuantity] = useState(0)
+  
     
 
   
