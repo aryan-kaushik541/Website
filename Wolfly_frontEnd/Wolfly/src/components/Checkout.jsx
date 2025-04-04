@@ -3,7 +3,7 @@ import Address from "./Address";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import emptyCart from '../Images/cart.png';
 
-import { useGetCartItemQuery, useDeleteCartItemMutation, useUpdateCartItemQuantityMutation } from "../services/userAuthApi";
+import { useGetCartItemQuery, useDeleteCartItemMutation, useUpdateCartItemQuantityMutation,useGetAddressQuery } from "../services/userAuthApi";
 import { Appstate } from "../App";
 import { getToken } from "../services/LocalStorageToken";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,21 +25,24 @@ const Checkout = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const { access_token } = getToken();
-    const { data: cartData, error } = useGetCartItemQuery(access_token);
+    const { data: cartData, error,refetch } = useGetCartItemQuery(access_token);
+    const { data:getAddress, error:add_error,refetch:add_refatch } = useGetAddressQuery(access_token);
     const [deleteCartItem] = useDeleteCartItemMutation(access_token);
     const [updatetoquantity] = useUpdateCartItemQuantityMutation(access_token)
   
     
 
-  
+
     
     useEffect(() => {
         
         if (cartData) {
+           
             setCartItems(cartData);
             const totalPrice = cartData.reduce((acc, item) => acc + (item.product.discount_price * item.quantity), 0);
             setTotalProductPrice(totalPrice);
             useAppState.setAddCartLength(cartData.length)
+            refetch();
         }
     }, [cartData]);
 
@@ -58,6 +61,7 @@ const Checkout = () => {
             // Update total price after state update
             setTotalProductPrice(updatedCart.reduce((acc, item) => acc + (item.product.discount_price * item.quantity), 0));
             useAppState.setAddCartLength(updatedCart.length)
+            refetch();
         } catch (error) {
             console.error("Error deleting item:", error);
         }
