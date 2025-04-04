@@ -33,7 +33,14 @@ const Checkout = () => {
     
 
 
+<<<<<<< HEAD
     
+=======
+    useEffect(()=>{
+   
+        console.log(getAddress)
+    },[])
+>>>>>>> recovered-branch
     useEffect(() => {
         
         if (cartData) {
