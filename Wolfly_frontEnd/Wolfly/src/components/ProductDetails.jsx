@@ -18,11 +18,9 @@ const ProductDetails = () => {
   const { access_token } = getToken();
   const useAppState = useContext(Appstate); // Access Appstate context
   const [addtocart, { isLoading }] = useAddToCartMutation(access_token)
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> recovered-branch
+
+
 
 
 
@@ -56,24 +54,21 @@ const ProductDetails = () => {
   })
 
   const handleAddToCart = async () => {
-<<<<<<< HEAD
+
     const response = await addtocart({ productInfo, access_token })
     console.log(response)
     if (response.error) {
       toast.error(response.error.data.error, { position: "top-right", autoClose: 1000, theme: "colored" });
     } else {
+      // const response = await addtocart({ productInfo, access_token })
 
-=======
+      // if (response.error) {
+      //   toast.error(response.error.data.error, { position: "top-right", autoClose: 1000, theme: "colored" });
+      // } else {
 
-    const response = await addtocart({ productInfo, access_token })
-
-    if (response.error) {
-      toast.error(response.error.data.error, { position: "top-right", autoClose: 1000, theme: "colored" });
-    } else {
-   
 
       useAppState.setAddCartLength(useAppState.addCartLength)
->>>>>>> recovered-branch
+
       toast.success("Product added to cart!", { position: "top-right", autoClose: 1000, theme: "colored" });
     }
   };
@@ -97,27 +92,7 @@ const ProductDetails = () => {
   }
 
   // product increment
-<<<<<<< HEAD
-  const increment = () =>{
-    if(productInfo.quantity>product.stock){
-     
-      toast.error(`only ${product.stock} products are avilable`, { position: "top-right", autoClose: 1000, theme: "colored" });
-    }else{
 
-      setProductInfo({...productInfo,"quantity":productInfo.quantity+=1})
-    }
-  }
-  // product increment
-  const decrement = () =>{
-    if(productInfo.quantity<2){
-      toast.error(`You can't add 0 product`, { position: "top-right", autoClose: 1000, theme: "colored" });
-    }else{
-
-      setProductInfo({...productInfo,"quantity":productInfo.quantity-=1})
-    }
-  }
-  
-=======
   const increment = () => {
     if (productInfo.quantity > product.stock) {
 
@@ -137,7 +112,8 @@ const ProductDetails = () => {
     }
   }
 
->>>>>>> recovered-branch
+
+
   return (
     <>
       <ToastContainer position="top-right" autoClose={1000} hideProgressBar theme="dark" />
@@ -172,27 +148,26 @@ const ProductDetails = () => {
             </div>
             <div className="text-2xl font-semibold text-gray-800 mt-3">
               Discount Price: <span>₹{product.discount_price}</span>
-<<<<<<< HEAD
-            </div>
-            <p className="text-green-600 mt-1">Available Stock: {product.stock}</p>
-            <p className="text-gray-500 mt-2">🚚 Free Delivery in 2-5 days</p>
-=======
 
             </div>
             <p className="text-green-600 mt-1">Available Stock: {product.stock}</p>
             <p className="text-gray-500 mt-2">🚚 Free Delivery in 2-5 days</p>
+
+
+
+
             {
               product.stock ?
-              <div className="flex items-center border border-gray-400 rounded-md w-20 h-8">
-                <button className="w-6 h-full text-sm font-semibold border-r border-gray-400 flex items-center justify-center" onClick={decrement}>-</button>
-                <p className="w-8 text-center">{productInfo.quantity}</p>
-                <button className="w-6 h-full text-sm font-semibold border-l border-gray-400 flex items-center justify-center" onClick={increment}>+</button>
-              </div>
-              :
-              <></>
-            }   
->>>>>>> recovered-branch
+                <div className="flex items-center border border-gray-400 rounded-md w-20 h-8">
+                  <button className="w-6 h-full text-sm font-semibold border-r border-gray-400 flex items-center justify-center" onClick={decrement}>-</button>
+                  <p className="w-8 text-center">{productInfo.quantity}</p>
+                  <button className="w-6 h-full text-sm font-semibold border-l border-gray-400 flex items-center justify-center" onClick={increment}>+</button>
+                </div>
+                :
+                <></>
+            }
           </div>
+
 
           {/* Order Section */}
           <div className="border p-5 rounded-lg shadow-md bg-gray-50">
@@ -218,27 +193,6 @@ const ProductDetails = () => {
 
 
                   </div>
-
-
-<<<<<<< HEAD
-                    <div className='grid items-center grid-cols-3 my-3 mx-0 border-2 border-gray-500 rounded-lg'>
-
-                        <button className='py-1 px-4 font-bold border-r-2 border-gray-500  text-lg' onClick={decrement} >-</button>
-
-                        <p className='py-1 px-4 text-center text-lg'>{productInfo.quantity}</p>
-
-                        <button className='py-1 px-4 font-bold border-l-2 border-gray-500 text-lg' onClick={increment}>+</button>
-
-                      </div>
-
-                 
-          
-=======
-
-
-
-
->>>>>>> recovered-branch
                 </>
                 :
                 <div className="flex flex-col gap-3 mt-5">

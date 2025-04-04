@@ -112,7 +112,7 @@ class UserRestPasswordSerializers(serializers.ModelSerializer):
             # decoded id and token
             byte_uid=urlsafe_base64_decode(uid)
             dcode_uid=smart_str(byte_uid) #  readeble
-            print(dcode_uid)
+            # print(dcode_uid)
                 
             if password==password2:
                 user=User.objects.get(id=dcode_uid)
