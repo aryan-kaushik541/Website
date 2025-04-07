@@ -96,6 +96,7 @@ export const userAuthApi = createApi({
                         'authorization':`Bearer ${access_token}`
                     }
                 }
+                
             },
         }),
 
@@ -138,11 +139,37 @@ export const userAuthApi = createApi({
                     'Content-type': 'application/json',
                     'authorization': `Bearer ${access_token}`
                 }
+
             }
+            },
+        }),
+        addAddress: builder.mutation({
+            query: ({ addressData, access_token }) => ({
+                url: "accounts/addaddress/",
+                method: "POST",
+                body: addressData,
+                headers: {
+                    "Content-type": "application/json",
+                    "authorization": `Bearer ${access_token}`,
+                },
+            }),
+        }),
+        getAddress: builder.query({
+            query:(access_token)=>{
+            
+                return{
+                    url:'accounts/addaddress/',
+                    method:'GET',
+                    headers:{
+                        'Content-type':'application/json',
+                        'authorization':`Bearer ${access_token}`
+                    }
+                }
+                
             },
         }),
         
     }),
 })
 
-export const { useRegisterUserMutation,useLoginUserMutation,useSendEmailPasswordMutation,useGetProfileUserQuery,useChangePasswordMutation,useResetPasswordMutation ,useGetProductsQuery,useGetCartItemQuery,useDeleteCartItemMutation,useAddToCartMutation,useUpdateCartItemQuantityMutation} = userAuthApi;
+export const { useRegisterUserMutation,useLoginUserMutation,useSendEmailPasswordMutation,useGetProfileUserQuery,useChangePasswordMutation,useResetPasswordMutation ,useGetProductsQuery,useGetCartItemQuery,useDeleteCartItemMutation,useAddToCartMutation,useUpdateCartItemQuantityMutation,useAddAddressMutation,useGetAddressQuery} = userAuthApi;

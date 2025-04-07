@@ -8,18 +8,7 @@ from accounts.utils import Util
 
 
 
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=user_address
-        exclude=['id']
-    def create(self, validated_data):
-        user = self.context['request'].user
-      
-        address,_=user_address.objects.get_or_create(**validated_data) 
-        user=User.objects.get(email=user)
-        user.address=address
-        user.save()
-        return address
+
 
 class UserRagistrationSerializers(serializers.ModelSerializer):
     # we are writing this becoz we need confirm password fields in our Ragistration Request
@@ -53,10 +42,10 @@ class UserLoginSerializers(serializers.ModelSerializer):
     
 
 class UserProfileSerializers(serializers.ModelSerializer):
-    address=AddressSerializer()
+    # address=AddressSerializer()
     class Meta:
         model=User
-        fields=['id','email','name','address']
+        fields=['id','name','email']
 
 
 class UserChangePasswordSerializers(serializers.ModelSerializer):
@@ -123,7 +112,7 @@ class UserRestPasswordSerializers(serializers.ModelSerializer):
             # decoded id and token
             byte_uid=urlsafe_base64_decode(uid)
             dcode_uid=smart_str(byte_uid) #  readeble
-            print(dcode_uid)
+            # print(dcode_uid)
                 
             if password==password2:
                 user=User.objects.get(id=dcode_uid)
@@ -138,4 +127,27 @@ class UserRestPasswordSerializers(serializers.ModelSerializer):
             PasswordResetTokenGenerator().check_token(user,token)
             raise serializers.ValidationError(detail="Token is not valid or expired")
 
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = user_address
+        fields = '__all__'
+
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if value and value != user.email:
+            raise serializers.ValidationError("Email does not match the authenticated user's email.")
+        return value
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+   
     
+    def create(self, validated_data):
+        user = self.context['request'].user
+ 
+        address,_=user_address.objects.get_or_create(**validated_data) 
+        user_instance=User.objects.get(email=user)
+        address.user.add(user_instance)
+        return address 

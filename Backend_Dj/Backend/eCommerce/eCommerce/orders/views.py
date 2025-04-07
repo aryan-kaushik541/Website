@@ -54,7 +54,7 @@ class AddToCart(APIView):
 
     def get(self, request):
         cart_items = CartItem.objects.filter(customer=request.user)
-        print(cart_items)
+        # print(cart_items)
         serializer = CartItemSerializer(cart_items, many=True)
         return Response(serializer.data)
 

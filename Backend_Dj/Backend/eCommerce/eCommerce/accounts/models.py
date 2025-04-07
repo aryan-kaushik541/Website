@@ -1,22 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, EmailValidator
 from django.conf import settings
 
 
 
 class user_address(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="addresses", null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)  # Still keep it optional
     village_or_town = models.TextField()
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
     pincode = models.CharField(max_length=7)
+    country = models.CharField(max_length=50,default='India')
     phone = models.CharField(
         max_length=12,
         validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$')]
     )
     def __str__(self):
-        return f"{self.user.email if self.user else 'No User'} - {self.village_or_town}, {self.city}, {self.state}, {self.pincode}"
+        return f"{self.village_or_town}, {self.city}, {self.state}, {self.pincode},{self.email}"
 
 # Custom User Model
 class UserManager(BaseUserManager):
@@ -70,7 +71,7 @@ class User(AbstractBaseUser):
     terms_condition=models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    address=models.ForeignKey(user_address,on_delete=models.CASCADE,related_name="user_address",null=True,blank=True)
+    # address=models.ForeignKey(user_address,on_delete=models.CASCADE,related_name="user_address",null=True,blank=True)
     # when create app
     created_at=models.DateTimeField(auto_now_add=True)
     # when update
