@@ -127,11 +127,11 @@ function AdminDashboard() {
         <SidebarSection>
           <SidebarTitle>ORDERS</SidebarTitle>
           <SidebarLinkContainer>
-            <SidebarLink href="#">Cart items</SidebarLink>
+            <SidebarLink href="http://127.0.0.1:8000/admin/orders/cartitem/">Cart items</SidebarLink>
            
           </SidebarLinkContainer>
           <SidebarLinkContainer>
-            <SidebarLink href="#">Orders</SidebarLink>
+            <SidebarLink href="http://127.0.0.1:8000/admin/orders/order/">Orders</SidebarLink>
             
           </SidebarLinkContainer>
         </SidebarSection>
@@ -139,17 +139,17 @@ function AdminDashboard() {
         <SidebarSection>
           <SidebarTitle>PRODUCTS</SidebarTitle>
           <SidebarLinkContainer>
-            <SidebarLink href="#">Brand names</SidebarLink>
+            <SidebarLink href="http://127.0.0.1:8000/admin/products/brandname/">Brand names</SidebarLink>
            
           </SidebarLinkContainer>
           <SidebarLinkContainer>
-            <SidebarLink href="#">Categorys</SidebarLink>
+            <SidebarLink href="http://127.0.0.1:8000/admin/products/category/">Categorys</SidebarLink>
             
           </SidebarLinkContainer>
           <SidebarLinkContainer>
-            <SidebarLink href="#">Productss</SidebarLink>
+            <SidebarLink href="http://127.0.0.1:8000/admin/products/products/">Productss</SidebarLink>
             <SidebarLinkContainer>
-            <SidebarLink href="http://127.0.0.1:8000/admin/accounts/user_address/add/">Add Change</SidebarLink>
+            <SidebarLink href="http://127.0.0.1:8000/admin/products/products/add/">Add Change</SidebarLink>
             </SidebarLinkContainer>
           </SidebarLinkContainer>
         </SidebarSection>
