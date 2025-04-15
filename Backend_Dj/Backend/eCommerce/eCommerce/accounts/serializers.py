@@ -45,7 +45,7 @@ class UserProfileSerializers(serializers.ModelSerializer):
     # address=AddressSerializer()
     class Meta:
         model=User
-        fields=['id','name','email']
+        fields=['id','name','email','Address']
 
 
 class UserChangePasswordSerializers(serializers.ModelSerializer):

@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from django.core.validators import RegexValidator, EmailValidator
+from django.core.validators import RegexValidator
 from django.conf import settings
 
 
 
 class user_address(models.Model):
-    email = models.EmailField(null=True, blank=True)  # Still keep it optional
+    user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="addresses", null=True, blank=True)
     village_or_town = models.TextField()
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
@@ -17,7 +17,7 @@ class user_address(models.Model):
         validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$')]
     )
     def __str__(self):
-        return f"{self.village_or_town}, {self.city}, {self.state}, {self.pincode},{self.email}"
+        return f"{self.village_or_town}, {self.city}, {self.state}, {self.pincode}"
 
 # Custom User Model
 class UserManager(BaseUserManager):
