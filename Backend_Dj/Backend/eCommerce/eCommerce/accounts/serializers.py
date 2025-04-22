@@ -45,7 +45,7 @@ class UserProfileSerializers(serializers.ModelSerializer):
     # address=AddressSerializer()
     class Meta:
         model=User
-        fields=['id','name','email']
+        fields=['id','name','email','Address']
 
 
 class UserChangePasswordSerializers(serializers.ModelSerializer):
@@ -129,11 +129,19 @@ class UserRestPasswordSerializers(serializers.ModelSerializer):
 
 
 class AddressSerializer(serializers.ModelSerializer):
-    user=UserProfileSerializers(many=True,read_only=True)
     class Meta:
-        model=user_address
-        exclude=['id']
+        model = user_address
+        fields = '__all__'
 
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if value and value != user.email:
+            raise serializers.ValidationError("Email does not match the authenticated user's email.")
+        return value
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
    
     
     def create(self, validated_data):

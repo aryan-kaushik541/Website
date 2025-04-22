@@ -24,7 +24,7 @@ const AddressForm = () => {
       const data = await response.json();
 
       if (data[0].Status === "Success") {
-        setCity(data[0].PostOffice[0].District);
+        setCity(data[0].PostOffice[0].City);
         setState(data[0].PostOffice[0].State);
         setCountry("India"); // This API is mainly for Indian pincodes
       } else {

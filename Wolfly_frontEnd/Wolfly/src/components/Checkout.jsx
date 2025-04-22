@@ -122,7 +122,7 @@ const Checkout = () => {
                         const verificationData = await verificationResponse.json();
                         if (verificationData.success) {
                             localStorage.removeItem("products"); // Clear cart
-                            navigate("/order-success"); // Redirect to success page
+                            navigate("/Order"); // Redirect to success page
                         } else {
                             setErrorMessage("Payment failed. Please try again.");
                         }

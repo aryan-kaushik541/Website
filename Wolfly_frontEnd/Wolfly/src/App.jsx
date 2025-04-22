@@ -9,7 +9,7 @@ import PageNotFound from "./PageNotFound";
 import { createContext,useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
-import AdminDashboard from './components/AdminDashboard';
+import AdminDashboard from './components/Admin/AdminDashboard';
 import SignUp from "./components/SignUpForm";
 import Forgetpassword from "./components/Forgetpassword";
 import ResetPassword from "./components/ResetPassword";
@@ -17,7 +17,8 @@ import { useSelector } from 'react-redux'
 import ProductDetails from "./components/ProductDetails";
 import Checkout from "./components/Checkout";
 import Address from "./components/Address";
-
+import Navbar from "./components/Admin/Navbar";
+import Sidebar from "./components/Admin/Siderbar";
 
 
 const Appstate = createContext();
@@ -37,6 +38,8 @@ const App = () => {
             <Route path="/product" element={<ProductContent />} />
             <Route path="/AddToCart" element={<AddToCart />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/Navbar" element={<Navbar/>} />
+            <Route path="/Siderbar" element={<Siderbar />} />
             <Route path="/Address" element={<Address />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
