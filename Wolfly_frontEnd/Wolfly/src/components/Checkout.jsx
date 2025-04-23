@@ -7,6 +7,7 @@ import { useGetCartItemQuery, useDeleteCartItemMutation, useUpdateCartItemQuanti
 import { Appstate } from "../App";
 import { getToken } from "../services/LocalStorageToken";
 import { ToastContainer, toast } from "react-toastify";
+
 const Checkout = () => {
     const useAppState = useContext(Appstate);
     const { slug } = useParams();
@@ -36,10 +37,6 @@ const Checkout = () => {
 
     
 
-    useEffect(()=>{
-   
-        console.log(getAddress)
-    },[])
 
     useEffect(() => {
         
@@ -75,10 +72,10 @@ const Checkout = () => {
 
     }
     const handlePlaceOrder = async () => {
-        if (!address || !mobile) {
-            setErrorMessage("Please provide address and mobile number.");
-            return;
-        }
+        // if (!address || !mobile) {
+        //     setErrorMessage("Please provide address and mobile number.");
+        //     return;
+        // }
 
         if (paymentMethod === "online") {
             // --- Online Payment Integration (Conceptual) ---
@@ -149,23 +146,22 @@ const Checkout = () => {
             // --- Cash on Delivery Logic ---
             setIsLoading(true);
             setErrorMessage("");
+            console.log(cartItems)
             try {
                 // Send order details to your backend to create a COD order
                 const orderData = {
-                    products: cart.map(item => ({
-                        product_id: item.id,
-                        quantity: item.quantity,
-                        price: item.discount_price,
+                    address_id:1,
+                    product:cartItems.map(item => ({
+                        "slug":item.product.slug,"quantity":item.quantity
                     })),
-                    total_price: getTotalPrice(),
-                    shipping_address: address,
-                    mobile_number: mobile,
-                    payment_method: "COD",
+                    
                 };
-
-                const response = await fetch('/api/place-order', {
+                console.log(orderData)
+                const response = await fetch('http://127.0.0.1:8000/orders/createorder/', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json',
+                        'Authorization':`Bearer ${access_token}`
+                     },
                     body: JSON.stringify(orderData),
                 });
 

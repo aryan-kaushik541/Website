@@ -132,7 +132,8 @@ class AddressSerializer(serializers.ModelSerializer):
     user=UserProfileSerializers(many=True,read_only=True)
     class Meta:
         model=user_address
-        exclude=['id']
+        # exclude=['id']
+        fields="__all__"
 
    
     
