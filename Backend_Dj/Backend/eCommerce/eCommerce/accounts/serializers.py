@@ -130,14 +130,12 @@ class UserRestPasswordSerializers(serializers.ModelSerializer):
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
-<<<<<<< HEAD
-        model = user_address
-        fields = '__all__'
-=======
+
+
         model=user_address
         # exclude=['id']
         fields="__all__"
->>>>>>> ba1c57e
+
 
     def validate_email(self, value):
         user = self.context['request'].user
