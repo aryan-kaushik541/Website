@@ -10,6 +10,7 @@ from products.models import Products
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
+from accounts.models import user_address
 
 class ShowOrder(APIView):
     permission_classes = [IsAuthenticated]
@@ -28,21 +29,29 @@ class CreateOrder(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self,request):
-        product_slug=request.data.get('product')
+        # print(product)
+        product_slugs=request.data.get('product')
+        address_id=request.data.get('address_id')
         try:
-            product = Products.objects.get(slug=product_slug)
-            if product.stock < 1:
-                return Response({"error": "Product is out of stock"}, status=status.HTTP_400_BAD_REQUEST)
+            for product_slug in product_slugs:
+            
+                product = Products.objects.get(slug=product_slug.get('slug'))
+                if product.stock < 1:
+                    return Response({"error": "Product is out of stock"}, status=status.HTTP_400_BAD_REQUEST)
+                address=user_address.objects.get(pk=address_id)
+            
+            
+                order = Order.objects.create(
+                    customer=request.user,
+                    address=address,
+                    products=product,
+                    final_price=product.discount_price,
+                    quantity=product_slug.get('quantity')
+                )
 
-            order = Order.objects.create(
-                customer=request.user,
-                products=product,
-                final_price=product.discount_price,
-            )
-
-            product.stock -= 1
-            product.save()
-            serializer = OrderSerializer(order)
+                product.stock -= 1
+                product.save()
+                serializer = OrderSerializer(order)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Products.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)

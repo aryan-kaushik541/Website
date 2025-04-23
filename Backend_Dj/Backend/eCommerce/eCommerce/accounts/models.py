@@ -17,7 +17,7 @@ class user_address(models.Model):
         validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$')]
     )
     def __str__(self):
-        return f"{self.village_or_town}, {self.city}, {self.state}, {self.pincode}"
+        return f"{self.id},{self.village_or_town}, {self.city}, {self.state}, {self.pincode}"
 
 # Custom User Model
 class UserManager(BaseUserManager):

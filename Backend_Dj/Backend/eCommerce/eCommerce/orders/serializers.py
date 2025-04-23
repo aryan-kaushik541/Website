@@ -9,11 +9,11 @@ from accounts.serializers import AddressSerializer
 
 
 class CustomerMinimalSerializers(serializers.ModelSerializer):
-    address = AddressSerializer()
+    
 
     class Meta:
         model = Customer
-        fields = ['name', 'email', 'address']
+        fields = ['name', 'email']
 
 
 class ProductMinimalSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class ProductMinimalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Products
-        fields = ['brand', 'category','front_imges','title','discount_price']
+        fields = ['brand', 'category','front_imges','title','discount_price','slug']
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -40,7 +40,8 @@ class CartItemSerializer(serializers.ModelSerializer):
     # product_price = serializers.FloatField(source="product.discount_price", read_only=True)
     # product_image = serializers.ImageField(source="product.image", read_only=True)
     product = ProductMinimalSerializer() # Change
-
+    customer =CustomerMinimalSerializers()
+ 
     class Meta:
         model = CartItem
         fields = ["id", "customer", "product", "quantity"]
