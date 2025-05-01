@@ -40,72 +40,104 @@ const Header = (props) => {
    
       <header className='flex flex-col min-w-56 md:sticky md:-top-1 z-10 '>
       
-        <section className='p-5 flex md:justify-between md:flex-row flex-col bg-white'>
+        <section className='p-5 flex md:justify-between md:flex-row flex-col bg-black'>
         <div className="flex items-center">
-          <img src={logo} alt="Wolfly Logo" className="w-60 h-20 mr-2" />
+          <img src={logo} alt="Wolfly Logo" className="w-30 h-14 mr-2" />
         </div>
           <nav className='md:my-0 my-2'>
               <ul className='flex gap-x-5 gap-y-5 items-center text-xl justify-between flex-wrap'>
-                <li>
-                  <NavLink to="/" style={({ isActive }) => ({
-                            fontWeight:  isActive ? "bold" : ""
-                        })} className="group transition duration-300">
-                    Home
-                    <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal"></span>
-                  </NavLink>
-                </li>
-                
-                <li>
-                  <NavLink to="/about" style={({ isActive }) => ({
-                            fontWeight:  isActive ? "bold" : ""
-                        })} className="group transition duration-300">
-                  About
-                  <span className='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal'></span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/product" style={({ isActive }) => ({
-                            fontWeight:  isActive ? "bold" : ""
-                        })} className="group transition duration-300">
-                  Product
-                  <span className='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal'></span>
-                  </NavLink>
+              <li>
+                <NavLink
+                  to="/"
+                  style={({ isActive }) => ({
+                    fontWeight: isActive ? 'bold' : '',
+                  })}
+                  className="group text-white hover:text-pink-500 transition-colors duration-300"
+                >
+                  Home
+                  <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
+                </NavLink>
+              </li>
 
-                </li>
                 
-                <li>
-                  <NavLink to="/contact" style={({ isActive }) => ({
-                            fontWeight:  isActive ? "bold" : ""
-                        })} className="group transition duration-300">
+              <li>
+                <NavLink
+                  to="/about"
+                  style={({ isActive }) => ({
+                    fontWeight: isActive ? 'bold' : '',
+                  })}
+                  className="group text-white hover:text-pink-500 transition-colors duration-300"
+                >
+                  About
+                  <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/product"
+                  style={({ isActive }) => ({
+                    fontWeight: isActive ? 'bold' : '',
+                  })}
+                  className="group text-white hover:text-pink-500 transition-colors duration-300"
+                >
+                  Product
+                  <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
+                </NavLink>
+              </li>
+
+                
+              <li>
+                <NavLink
+                  to="/contact"
+                  style={({ isActive }) => ({
+                    fontWeight: isActive ? 'bold' : '',
+                  })}
+                  className="group text-white hover:text-pink-500 transition-colors duration-300"
+                >
                   Contact
-                  <span className='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal'></span>
-                  </NavLink>
-                </li>
-              
+                  <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
+                </NavLink>
+              </li>
+
                { 
                storeToken?
-                <li>
-                <button onClick={handleLogout}  className="group transition duration-300">
-                  Logout
-                  <span className='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal'></span>
-                  </button>
-                </li>
+               <li>
+               <button
+                 onClick={handleLogout}
+                 className="group text-white hover:text-pink-500 transition-colors duration-300"
+               >
+                 Logout
+                 <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
+               </button>
+             </li>
+             
                 :
                 <li>
-                <NavLink to="/login" style={({ isActive }) => ({
-                            fontWeight:  isActive ? "bold" : ""
-                        })} className="group transition duration-300">
-                  Login
-                  <span className='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal'></span>
+                  <NavLink
+                    to="/login"
+                    style={({ isActive }) => ({
+                      fontWeight: isActive ? 'bold' : '',
+                    })}
+                    className="group text-white hover:text-pink-500 transition-colors duration-300"
+                  >
+                    Login
+                    <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
                   </NavLink>
                 </li>
+
                 }
                 <li>
-                  <NavLink to={access_token?`/Checkout`:`/login`} className="flex  bg-dark-teal text-teal-100 justify-center px-5 py-1 text-sm rounded-md">
-                      <ShoppingCartIcon/>
-                      <p className='pl-2 text-lg'>{access_token?useAppState.addCartLength:''}</p>
+                  <NavLink
+                    to={access_token ? `/Checkout` : `/login`}
+                    className="group flex bg-gradient-to-r from-red-500 to-red-700 text-teal-100 justify-center px-5 py-1 text-sm rounded-md transition-colors duration-300"
+                  >
+                    <ShoppingCartIcon />
+                    <p className="pl-2 text-lg">{access_token ? useAppState.addCartLength : ''}</p>
+                    <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-dark-teal group-hover:bg-pink-500"></span>
                   </NavLink>
                 </li>
+
               </ul>
           </nav>
         </section>
