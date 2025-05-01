@@ -25,33 +25,32 @@ const Banner = () => {
 
     return (
         <>
-           <main className='relative w-full'>
-            <section className='relative flex items-center justify-center h-96 overflow-hidden'>
-                <div className='relative w-full h-full flex items-center justify-center overflow-hidden'>
-                    <div className='w-full h-full flex transition-transform duration-700 ease-in-out'
-                         style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                        {images.map((img, index) => (
-                            <img 
-                                key={index} 
-                                src={img} 
-                                className='w-full h-full object-cover flex-shrink-0' 
-                                alt={`Slide ${index + 1}`} 
-                            />
-                        ))}
+            <main className='relative w-full bg-black'> {/* Added bg-black here */}
+                <section className='relative flex items-center justify-center h-96 overflow-hidden'>
+                    <div className='relative w-full h-full flex items-center justify-center overflow-hidden'>
+                        <div className='w-full h-full flex transition-transform duration-700 ease-in-out'
+                            style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                            {images.map((img, index) => (
+                                <img
+                                    key={index}
+                                    src={img}
+                                    className='w-full h-full object-cover flex-shrink-0'
+                                    alt={`Slide ${index + 1}`}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
-                
-                <button onClick={prevSlide} className='absolute left-5 bg-black p-2 rounded-full text-white hover:bg-gray-700'>
-                    <ChevronLeft size={24} />
-                </button>
-                <button onClick={nextSlide} className='absolute right-5 bg-black p-2 rounded-full text-white hover:bg-gray-700'>
-                    <ChevronRight size={24} />
-                </button>
-            </section>
-      
-        </main>
+
+                    <button onClick={prevSlide} className='absolute left-5 bg-black p-2 rounded-full text-white hover:bg-gray-700'>
+                        <ChevronLeft size={24} />
+                    </button>
+                    <button onClick={nextSlide} className='absolute right-5 bg-black p-2 rounded-full text-white hover:bg-gray-700'>
+                        <ChevronRight size={24} />
+                    </button>
+                </section>
+            </main>
         </>
-    )
+    );
 }
 
 export default Banner;

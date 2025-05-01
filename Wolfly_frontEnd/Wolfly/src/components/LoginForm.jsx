@@ -7,6 +7,7 @@ import { getToken, storeToken } from '../services/LocalStorageToken';
 import { useDispatch } from 'react-redux'
 import { setUserToken } from '../features/user/userSlice';
 import { motion } from "framer-motion";
+import logo from '../Images/logo.png';
 
 const Login = () => {
 
@@ -70,7 +71,7 @@ const Login = () => {
     },[access_token,dispatch])
     return (
         <>
-            <div className='flex items-center justify-center mt-32 w-full bg-[url("your.png")] bg-cover bg-center'>
+            <div className='flex items-center justify-center mt-32 w-full bg-[url("Wolfly_frontEnd\Wolfly\src\Images\logo.png")] bg-cover bg-center'>
             <motion.div
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}

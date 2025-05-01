@@ -7,7 +7,7 @@ import { getToken,deleteToken } from '../services/LocalStorageToken';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetCartItemQuery } from "../services/userAuthApi";
-
+import logo from '../Images/logo.png';
 
 const Header = (props) => {
   const useAppState = useContext(Appstate);
@@ -41,9 +41,9 @@ const Header = (props) => {
       <header className='flex flex-col min-w-56 md:sticky md:-top-1 z-10 '>
       
         <section className='p-5 flex md:justify-between md:flex-row flex-col bg-white'>
-          <div >
-            <span className='border-2 border-dark-teal font-mono  p-2 font-bold'><span className='mx-1 p-1 bg-dark-teal text-teal-100'>Wolfly</span><span></span></span>
-          </div>
+        <div className="flex items-center">
+          <img src={logo} alt="Wolfly Logo" className="w-60 h-20 mr-2" />
+        </div>
           <nav className='md:my-0 my-2'>
               <ul className='flex gap-x-5 gap-y-5 items-center text-xl justify-between flex-wrap'>
                 <li>

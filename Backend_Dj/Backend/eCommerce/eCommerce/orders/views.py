@@ -29,9 +29,9 @@ class CreateOrder(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self,request):
-        # print(product)
         product_slugs=request.data.get('product')
         address_id=request.data.get('address_id')
+        print(address_id,product_slugs)
         try:
             for product_slug in product_slugs:
             

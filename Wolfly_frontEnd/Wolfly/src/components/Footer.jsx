@@ -6,13 +6,18 @@ import instagram_logo from '../Images/instagram_logo.png'
 import linked_logo from '../Images/linked_logo.png'
 import github_logo from '../Images/github_logo.png'
 import youtube_logo from '../Images/youtube_logo.png'
+import logo from '../Images/logo.png';
 const Footer = () => {
     return (
         <>
             <footer className='bg-dark-teal text-teal-100'>
                 <div className='mt-44 pt-10 pb-5 px-5'>
                     <div className='flex flex-col '>
-                        <span className='border-2 border-white font-mono p-2 w-36 font-bold'><span className='mx-1 p-1 my-5 bg-white text-dark-teal'>Wolfly</span></span>
+                    <span className=" font-mono p-2 w-50 ">
+                        <span className="flex items-center">
+                         <img src={logo} alt="Wolfly Logo" className="w-40 h-20 mr-2" />
+                        </span>
+                    </span>
                         <p className='my-5 font-thin'>
                             Welcome to Wolfly, your ultimate destination for cutting-edge gadgets!
                         </p>
