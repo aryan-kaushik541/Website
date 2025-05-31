@@ -17,7 +17,7 @@
     "@mui/material": "^5.17.1",
     "@mui/styles": "^6.4.11",
     "@reduxjs/toolkit": "^2.6.1",
-    "axios": "^1.8.1",
+    "axios": "^1.8.2",
     "firebase": "^11.4.0",
     "framer-motion": "^12.4.10",
     "git": "^0.1.5",
